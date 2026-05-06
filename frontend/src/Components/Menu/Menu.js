@@ -29,7 +29,7 @@ const Menu = () => {
 
   const HandlerChooseCoffee = (coffee, name) => {
     handlerCoffee(coffee);
-    navigate(`/Coffees=/, ${name}`);
+    navigate(`/Coffees=/${name}`);
   };
 
   const navigateToProducts = () => {
@@ -54,7 +54,7 @@ const Menu = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12 mb-16">
           {coffeesArrays.map((item) => (
             <div
-              key={item._id}
+              key={item.id}
               onClick={() => HandlerChooseCoffee(item, item.name)}
               className="
                 flex gap-6 items-center pb-6 cursor-pointer group

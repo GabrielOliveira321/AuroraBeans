@@ -23,11 +23,10 @@ export const InfoCoffee = () => {
         const fetchCoffees = async () => {
             try {
                 const data = await apiProd();
-                console.log("Todos os cafés:", data);
                 console.log("Categoria atual:", infoCoffee?.category);
-                
+
                 if (isMounted && infoCoffee) {
-                    const semelhantes = data.filter((caf) => {return caf.category === infoCoffee.category;})
+                    const semelhantes = data.filter((caf) => { return caf.category === infoCoffee.category; })
                     setRelatedCoffees(semelhantes);
                 }
             } catch (error) {
@@ -60,9 +59,9 @@ export const InfoCoffee = () => {
     const handleRelatedCoffeeClick = (coffee) => {
         setContextCoffee(coffee);
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        navigate(`/Coffees=/, ${coffee.name}`);
+        navigate(`/Coffees=/${coffee.name}`);
     };
-    
+
 
     return (
         <div className="min-h-screen bg-[#12100E] text-[#F4F1EA] font-sans flex flex-col">
@@ -139,7 +138,7 @@ export const InfoCoffee = () => {
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
                                 {relatedCoffees.map((coffee) => (
                                     <div
-                                        key={coffee._id}
+                                        key={coffee.id}
                                         onClick={() => handleRelatedCoffeeClick(coffee)}
                                         className="
                                             flex flex-col bg-black/20 p-4 rounded-xl cursor-pointer group

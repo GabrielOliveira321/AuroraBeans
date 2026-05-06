@@ -7,7 +7,7 @@ import { apiProd } from '../../api/api';
 
 const Products = () => {
   const navigate = useNavigate();
-  const { handlerCoffee, handlerCategory } = useCoffee();
+  const { handlerCoffee } = useCoffee();
 
   const [filter, setFilter] = useState("Todos");
   const [coffeesArrays, setCoffeesArrays] = useState([]);
@@ -20,7 +20,6 @@ const Products = () => {
         const data = await apiProd();
         if (isMounted) {
           setCoffeesArrays(data);
-          handlerCategory(data);
         }
       } catch (error) {
         console.error("Erro ao buscar API:", error);
@@ -43,7 +42,7 @@ const Products = () => {
 
   const HandlerChooseCoffee = (coffee, name) => {
     handlerCoffee(coffee);
-    navigate(`/Coffees=/, ${name}`);
+    navigate(`/Coffees=/${name}`);
   };
 
   return (
@@ -107,7 +106,7 @@ const Products = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16">
               {filteredItems.map((item) => (
                 <div
-                  key={item._id}
+                  key={item.id}
                   onClick={() => HandlerChooseCoffee(item, item.name)}
                   className="
                     flex flex-col bg-black/20 p-6 rounded-2xl cursor-pointer group

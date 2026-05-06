@@ -24,3 +24,18 @@ model User {
   email    String @unique
   password String
 }
+
+model Checkout {
+  id            Int      @id @default(autoincrement())
+  firstName     String
+  lastName      String
+  address       String
+  addressNumber String
+  city          String
+  zip           String
+  cardLast4     String
+  expiry        String
+  plan          String
+  price         Float
+  createdAt     DateTime @default(now())
+}

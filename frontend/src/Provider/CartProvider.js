@@ -24,7 +24,6 @@ export const CartProvider = ({ children }) => {
         });
     }
 
-
     const decreaseItem = (id) => {
         setCartCoffee((prev) => {
             return prev

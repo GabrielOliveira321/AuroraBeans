@@ -1,10 +1,12 @@
 import { useCart } from "../../Provider/CartProvider";
 import { LucideShoppingCart } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 import { CartProducts } from "./CartProducts";
 
 export const Cart = () => {
     const { cartCoffee } = useCart();
+    const navigate = useNavigate();
 
     const totalPrice = cartCoffee.reduce((total, item) => {
         return total + item.price * item.quantity;
@@ -20,7 +22,7 @@ export const Cart = () => {
 
                 {
                     cartCoffee.map((item) => {
-                        return <CartProducts key={item._id} itemCoffee={item} />
+                        return <CartProducts key={item.id} itemCoffee={item} />
                     })
                 }
 
@@ -37,7 +39,7 @@ export const Cart = () => {
                     </div>
 
                     <div className="w-full md:w-auto">
-                        <button className="w-full md:w-64 bg-[#c5a47e] hover:bg-[#a38665] text-[#12100E] font-bold py-4 px-8 rounded-sm transition-all duration-300 uppercase tracking-widest text-sm active:scale-95 shadow-[0_0_20px_rgba(197,164,126,0.2)]">
+                        <button onClick={() => navigate('/checkout')} className="w-full md:w-64 bg-[#c5a47e] hover:bg-[#a38665] text-[#12100E] font-bold py-4 px-8 rounded-sm transition-all duration-300 uppercase tracking-widest text-sm active:scale-95 shadow-[0_0_20px_rgba(197,164,126,0.2)]">
                             Finalizar Compra
                         </button>
                     </div>

@@ -3,6 +3,7 @@ import { PrismaService } from '../database/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { RegisterDto, LoginDto } from './dto/auth.dto';
+import { CheckoutDto } from './dto/checkout.dto';
 
 @Injectable()
 export class AuthService {
@@ -36,6 +37,11 @@ export class AuthService {
     return {
       message: 'Usuário criado com sucesso!',
       access_token: this.jwtService.sign(payload),
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
     };
   }
 
@@ -60,6 +66,32 @@ export class AuthService {
     return {
       message: 'Login realizado com sucesso!',
       access_token: this.jwtService.sign(payload),
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
     };
+  }
+
+  async checkout(data: CheckoutDto) {
+    const rawCardNumber = data.cardNumber.replace(/\D/g, '');
+    const cardLast4 = rawCardNumber.slice(-4);
+    const price = Number(data.price);
+
+    return this.prisma.checkout.create({
+      data: {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        address: data.address,
+        addressNumber: data.addressNumber,
+        city: data.city,
+        zip: data.zip,
+        cardLast4,
+        expiry: data.expiry,
+        plan: data.plan,
+        price,
+      },
+    });
   }
 }

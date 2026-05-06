@@ -1,11 +1,15 @@
 import React from 'react';
-import { User, MapPin, CreditCard, ArrowRight } from 'lucide-react';
+import { User, MapPin, CreditCard, ArrowRight, CheckCircle } from 'lucide-react';
 import { useSubScription } from '../../Provider/Subscription';
+import { checkoutApi } from '../../api/checkoutApi';
 
 const Signature = () => {
   const [DataForm, setDataForm] = React.useState({
     name: '', surname: '', city: '', state: '', cep: '', numCat: '', validity: '', cvv: '', address: '', numHome: ''
   });
+  const [submitError, setSubmitError] = React.useState('');
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [submitSuccess, setSubmitSuccess] = React.useState(false);
 
   const { chosePlan } = useSubScription();
 
@@ -14,7 +18,7 @@ const Signature = () => {
   const masks = {
     cep(value) {
       return value
-        .replace(/\D/g, "") 
+        .replace(/\D/g, "")
         .replace(/(\d{5})(\d)/, "$1-$2")
         .replace(/(-\d{3})\d+?$/, "$1");
     },
@@ -24,13 +28,13 @@ const Signature = () => {
         .replace(/(\d{4})(\d)/, "$1 $2")
         .replace(/(\d{4})(\d)/, "$1 $2")
         .replace(/(\d{4})(\d)/, "$1 $2")
-        .replace(/(\s\d{4})\d+?$/, "$1"); 
+        .replace(/(\s\d{4})\d+?$/, "$1");
     },
     expiration(value) {
       return value
         .replace(/\D/g, "")
-        .replace(/(\d{2})(\d)/, "$1/$2") 
-        .replace(/(\/\d{2})\d+?$/, "$1");
+        .replace(/(\d{2})(\d)/, "$1/$2")
+        .substring(0, 5);
     }
   };
 
@@ -45,11 +49,41 @@ const Signature = () => {
     setDataForm({ ...DataForm, [name]: maskedValue });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    alert(chosePlan);
-    console.log("Dados:", DataForm, "Plano", chosePlan);
-  }
+    setSubmitError('');
+
+    if (!chosePlan || !chosePlan.name) {
+      setSubmitError('Selecione um plano antes de finalizar a assinatura.');
+      return;
+    }
+
+    const payload = {
+      firstName: DataForm.name,
+      lastName: DataForm.surname,
+      address: DataForm.address,
+      addressNumber: DataForm.numHome,
+      city: DataForm.city,
+      zip: DataForm.cep,
+      cardNumber: DataForm.numCat,
+      expiry: DataForm.validity,
+      cvc: DataForm.cvv,
+      plan: chosePlan.name,
+      price: chosePlan.price?.toString() || '',
+    };
+
+    setIsSubmitting(true);
+    const result = await checkoutApi(payload);
+    setIsSubmitting(false);
+
+    if (!result.success) {
+      setSubmitError(result.message || 'Erro ao enviar os dados de checkout.');
+      return;
+    }
+
+    alert(`Checkout enviado com sucesso! Plano: ${chosePlan.name} - R$ ${chosePlan.price}`);
+    setDataForm({ name: '', surname: '', city: '', state: '', cep: '', numCat: '', validity: '', cvv: '', address: '', numHome: '' });
+  };
 
   return (
     <div className="bg-[#161310] border border-white/5 p-8 lg:p-10 shadow-2xl">
@@ -120,8 +154,10 @@ const Signature = () => {
           </div>
         </div>
 
-        <button className="w-full py-4 bg-[#c4a484] text-black font-bold uppercase tracking-[0.2em] text-xs hover:bg-white transition-all duration-500 flex items-center justify-center gap-3">
-          Finalizar Assinatura <ArrowRight size={16} />
+        {submitError && <p className="text-sm text-red-400">{submitError}</p>}
+
+        <button disabled={isSubmitting} className="w-full py-4 bg-[#c4a484] text-black font-bold uppercase tracking-[0.2em] text-xs hover:bg-white transition-all duration-500 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed">
+          {isSubmitting ? 'Enviando...' : 'Finalizar Assinatura'} <ArrowRight size={16} />
         </button>
       </form>
     </div>
