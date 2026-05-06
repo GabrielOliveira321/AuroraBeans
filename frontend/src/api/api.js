@@ -1,6 +1,6 @@
 export const apiProd = async () => {
   try {
-    const response = await fetch("http://localhost:3030/api/AuroraBeans/cafes");
+    const response = await fetch("http://localhost:8080/product");
 
     if (!response.ok) {
       throw new Error("Erro na requisição");

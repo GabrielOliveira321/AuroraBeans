@@ -10,6 +10,7 @@ import { Cart } from "../Components/Cart/Cart";
 
 
 import { SubscripitonProvider } from "../Provider/Subscription";
+import Products from "../Pages/Products/Products";
 
 const RoutesApp = () => {
 
@@ -22,7 +23,7 @@ const RoutesApp = () => {
                             <Route path="/*" element={<Home />} />
                             <Route path="/Coffees=/:name" element={<InfoCoffee />} />
                             <Route path="/Cart" element={<Cart />} />
-
+                            <Route path="/Products" element={<Products />} />
                             <Route path="/Subscription" element={<Subscription />} />
                         </Routes>
                     </BrowserRouter>
@@ -34,5 +35,3 @@ const RoutesApp = () => {
 }
 
 export default RoutesApp;
-
-{/* <Route path="/Actor=/:name" element={<CelebrityInformation />} /> */ }

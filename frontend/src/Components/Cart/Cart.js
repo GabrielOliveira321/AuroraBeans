@@ -7,7 +7,7 @@ export const Cart = () => {
     const { cartCoffee } = useCart();
 
     const totalPrice = cartCoffee.reduce((total, item) => {
-        return total + item.price * item.quantity;        
+        return total + item.price * item.quantity;
     }, 0);
 
     const showCart = (
@@ -21,7 +21,6 @@ export const Cart = () => {
                 {
                     cartCoffee.map((item) => {
                         return <CartProducts key={item._id} itemCoffee={item} />
-
                     })
                 }
 

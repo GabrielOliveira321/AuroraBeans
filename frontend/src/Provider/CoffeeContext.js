@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react"
 
 const CoffeeContext = createContext();
 
-export const CoffeeProvider = ({children}) => {
+export const CoffeeProvider = ({ children }) => {
 
     const [infoCoffee, setInfoCoffee] = useState(() => {
         const coffeeSeved = localStorage.getItem("coffee");
@@ -23,11 +23,11 @@ export const CoffeeProvider = ({children}) => {
             localStorage.setItem("coffee", JSON.stringify(infoCoffee));
         } else {
             localStorage.removeItem("coffee")
-        } 
+        }
     }, [infoCoffee]);
 
     return (
-        <CoffeeContext.Provider value={{infoCoffee, setInfoCoffee, handlerCoffee, clearInfoCoffee}}>
+        <CoffeeContext.Provider value={{ infoCoffee, setInfoCoffee, handlerCoffee, clearInfoCoffee }}>
             {children}
         </CoffeeContext.Provider>
     )
