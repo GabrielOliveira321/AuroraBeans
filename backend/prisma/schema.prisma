@@ -19,10 +19,34 @@ model Product {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  name     String
-  email    String @unique
-  password String
+  id           Int     @id @default(autoincrement())
+  name         String
+  email        String  @unique
+  password     String
+  street       String?
+  neighborhood String?
+  zip          String?
+  photoUrl     String?
+  orders       Order[]
+}
+
+model Order {
+  id              Int      @id @default(autoincrement())
+  userId          Int
+  user            User     @relation(fields: [userId], references: [id])
+  firstName       String
+  lastName        String
+  address         String
+  addressNumber   String
+  city            String
+  zip             String
+  cardLast4       String
+  expiry          String
+  plan            String
+  price           Float
+  stripePaymentId String?
+  status          String   @default("pending")
+  createdAt       DateTime @default(now())
 }
 
 model Checkout {
@@ -38,4 +62,22 @@ model Checkout {
   plan          String
   price         Float
   createdAt     DateTime @default(now())
+}
+
+model Contact {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  phone     String?
+  subject   String
+  message   String
+  createdAt DateTime @default(now())
+}
+
+model NewsletterSubscriber {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
 }

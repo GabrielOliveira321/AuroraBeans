@@ -12,6 +12,11 @@ import { SubscripitonProvider } from "../Provider/Subscription";
 import Products from "../Pages/Products/Products";
 import { AuthProvider } from "../Provider/AuthProvider";
 import Checkout from "../Pages/Checkout/Checkout";
+import Profile from "../Pages/Profile/Profile";
+import NotFound from "../Pages/NotFound/NotFound";
+import Contact from "../Pages/Contact/Contact";
+import Orders from "../Pages/Orders/Orders";
+import About from "../Pages/About/About";
 
 const RoutesApp = () => {
 
@@ -25,11 +30,16 @@ const RoutesApp = () => {
                             <Routes>
                                 <Route path="/login" element={<Auth />} />
                                 <Route path="/cart" element={<Cart />} />
-                                <Route path="/*" element={<Home />} />
+                                <Route path="/" element={<Home />} />
                                 <Route path="/Coffees=/:name" element={<InfoCoffee />} />
                                 <Route path="/Products" element={<Products />} />
                                 <Route path="/Subscription" element={<Subscription />} />
                                 <Route path="/checkout" element={<Checkout />} />
+                                <Route path="/about" element={<About />} />
+                                <Route path="/contact" element={<Contact />} />
+                                <Route path="/orders" element={<Orders />} />
+                                <Route path="/profile" element={<Profile />} />
+                                <Route path="*" element={<NotFound />} />
                             </Routes>
                         </BrowserRouter>
                     </SubscripitonProvider>

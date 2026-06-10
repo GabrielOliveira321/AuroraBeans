@@ -1,6 +1,9 @@
-export const apiProd = async () => {
+import config from '../config';
+
+export const apiProd = async (page = 1, limit = 12) => {
   try {
-    const response = await fetch("http://localhost:8080/product");
+    const url = `${config.API_URL}/product?page=${page}&limit=${limit}`;
+    const response = await fetch(url);
 
     if (!response.ok) {
       throw new Error("Erro na requisição");

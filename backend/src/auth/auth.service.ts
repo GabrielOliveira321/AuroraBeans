@@ -1,8 +1,8 @@
-import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ConflictException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { RegisterDto, LoginDto } from './dto/auth.dto';
+import { RegisterDto, LoginDto, UpdateProfileDto } from './dto/auth.dto';
 import { CheckoutDto } from './dto/checkout.dto';
 
 @Injectable()
@@ -41,6 +41,10 @@ export class AuthService {
         id: user.id,
         name: user.name,
         email: user.email,
+        street: user.street,
+        neighborhood: user.neighborhood,
+        zip: user.zip,
+        photoUrl: user.photoUrl,
       },
     };
   }
@@ -70,6 +74,10 @@ export class AuthService {
         id: user.id,
         name: user.name,
         email: user.email,
+        street: user.street,
+        neighborhood: user.neighborhood,
+        zip: user.zip,
+        photoUrl: user.photoUrl,
       },
     };
   }
@@ -91,6 +99,61 @@ export class AuthService {
         expiry: data.expiry,
         plan: data.plan,
         price,
+      },
+    });
+  }
+
+  async getProfile(userId: number) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        street: true,
+        neighborhood: true,
+        zip: true,
+        photoUrl: true,
+      },
+    });
+
+    if (!user) throw new NotFoundException('Usuário não encontrado.');
+    return user;
+  }
+
+  async updateProfile(userId: number, data: UpdateProfileDto) {
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        ...(data.name !== undefined && { name: data.name }),
+        ...(data.street !== undefined && { street: data.street }),
+        ...(data.neighborhood !== undefined && { neighborhood: data.neighborhood }),
+        ...(data.zip !== undefined && { zip: data.zip }),
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        street: true,
+        neighborhood: true,
+        zip: true,
+        photoUrl: true,
+      },
+    });
+  }
+
+  async updatePhoto(userId: number, photoUrl: string) {
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: { photoUrl },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        street: true,
+        neighborhood: true,
+        zip: true,
+        photoUrl: true,
       },
     });
   }

@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import Footer from '../Footer/Footer';
 import { useCoffee } from '../../Provider/CoffeeContext';
 
 const Story = () => {
@@ -60,8 +59,6 @@ const Story = () => {
 
                 </div>
             </section>
-
-            <Footer />
         </>
     );
 };

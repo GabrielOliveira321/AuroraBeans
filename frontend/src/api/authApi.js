@@ -1,8 +1,8 @@
-const API_URL = "http://localhost:8080";
+import config from '../config';
 
 export const loginApi = async (credentials) => {
     try {
-        const response = await fetch(`${API_URL}/auth/login`, {
+        const response = await fetch(`${config.API_URL}/auth/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -25,7 +25,7 @@ export const loginApi = async (credentials) => {
 
 export const registerApi = async (userData) => {
     try {
-        const response = await fetch(`${API_URL}/auth/register`, {
+        const response = await fetch(`${config.API_URL}/auth/register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

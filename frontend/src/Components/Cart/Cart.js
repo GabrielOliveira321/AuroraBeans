@@ -1,6 +1,7 @@
 import { useCart } from "../../Provider/CartProvider";
 import { LucideShoppingCart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import Header from "../Header/Header";
 
 import { CartProducts } from "./CartProducts";
 
@@ -69,9 +70,10 @@ export const Cart = () => {
     </div>
 
     return (
-        <div>
+        <div className="min-h-screen bg-[#12100E]">
+            <Header />
             {
-                cartCoffee.length > 0 ? <div>{showCart}</div> : <div>{NoCoffeeInCart}</div>
+                cartCoffee.length > 0 ? <div>{showCart}</div> : <div className="pt-24">{NoCoffeeInCart}</div>
             }
         </div>
     );

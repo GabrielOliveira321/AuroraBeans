@@ -36,9 +36,27 @@ export class ProductService {
     }
   }
 
-  async findAll() {
+  async findAll(page: number = 1, limit: number = 12) {
     try {
-      return await this.prisma.product.findMany();
+      const skip = (page - 1) * limit;
+
+      const [products, total] = await Promise.all([
+        this.prisma.product.findMany({
+          skip,
+          take: limit,
+        }),
+        this.prisma.product.count(),
+      ]);
+
+      return {
+        data: products,
+        meta: {
+          total,
+          page,
+          limit,
+          totalPages: Math.ceil(total / limit),
+        },
+      };
     } catch (error) {
       console.log('[ERRO FATAL] Falha ao buscar todos os produtos:', error);
       throw error;

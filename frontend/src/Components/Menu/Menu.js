@@ -3,22 +3,42 @@ import { useNavigate } from 'react-router-dom';
 import { useCoffee } from '../../Provider/CoffeeContext';
 import { apiProd } from '../../api/api';
 
+const MenuSkeleton = () => (
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12 mb-16">
+    {[1, 2, 3, 4].map((i) => (
+      <div key={i} className="flex gap-6 items-center pb-6 border-b border-white/5 animate-pulse">
+        <div className="w-24 h-24 md:w-28 md:h-28 flex-shrink-0 rounded-sm bg-gray-800" />
+        <div className="flex-1">
+          <div className="h-5 bg-gray-800 rounded w-1/2 mb-2" />
+          <div className="h-4 bg-gray-800 rounded w-3/4 mb-1" />
+          <div className="h-3 bg-gray-800 rounded w-1/4" />
+        </div>
+      </div>
+    ))}
+  </div>
+);
+
 const Menu = () => {
   const navigate = useNavigate();
   const { handlerCoffee } = useCoffee();
 
   const [coffeesArrays, setCoffeesArrays] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
+    setLoading(true);
     const getAPI = async () => {
       try {
-        const data = await apiProd();
+        const result = await apiProd(1, 4);
         if (isMounted) {
-          setCoffeesArrays(data.slice(0, 4));
+          const items = result.data ? result.data.slice(0, 4) : (Array.isArray(result) ? result.slice(0, 4) : []);
+          setCoffeesArrays(items);
         }
       } catch (error) {
         console.error("Erro ao buscar API:", error);
+      } finally {
+        if (isMounted) setLoading(false);
       }
     };
     getAPI();
@@ -51,7 +71,10 @@ const Menu = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12 mb-16">
+        {loading ? (
+          <MenuSkeleton />
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-12 mb-16">
           {coffeesArrays.map((item) => (
             <div
               key={item.id}
@@ -104,6 +127,7 @@ const Menu = () => {
             </div>
           ))}
         </div>
+        )}
 
         <div className="text-center">
           <button

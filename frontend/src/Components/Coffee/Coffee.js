@@ -22,11 +22,14 @@ export const InfoCoffee = () => {
         let isMounted = true;
         const fetchCoffees = async () => {
             try {
-                const data = await apiProd();
-                console.log("Categoria atual:", infoCoffee?.category);
+                // Busca todos os produtos para encontrar relacionados
+                const result = await apiProd(1, 100);
+                const items = result.data || result || [];
 
                 if (isMounted && infoCoffee) {
-                    const semelhantes = data.filter((caf) => { return caf.category === infoCoffee.category; })
+                    const semelhantes = (Array.isArray(items) ? items : [])
+                        .filter((caf) => caf.category === infoCoffee.category)
+                        .filter((caf) => caf.id !== infoCoffee.id);
                     setRelatedCoffees(semelhantes);
                 }
             } catch (error) {

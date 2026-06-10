@@ -1,7 +1,11 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get, Patch, UseGuards, UseInterceptors, UploadedFile, BadRequestException } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 import { AuthService } from './auth.service';
-import { RegisterDto, LoginDto } from './dto/auth.dto';
-import { CheckoutDto } from './dto/checkout.dto';
+import { RegisterDto, LoginDto, UpdateProfileDto } from './dto/auth.dto';
+import { JwtAuthGuard } from './jwt-auth.guard';
+import { CurrentUser } from './user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -17,12 +21,41 @@ export class AuthController {
     return this.authService.login(body);
   }
 
-  @Post('checkout')
-  async checkout(@Body() body: CheckoutDto) {
-    const checkout = await this.authService.checkout(body);
-    return {
-      message: 'Checkout gravado com sucesso!',
-      checkout,
-    };
+  @Get('profile')
+  @UseGuards(JwtAuthGuard)
+  async getProfile(@CurrentUser() user: any) {
+    return this.authService.getProfile(user.sub);
+  }
+
+  @Patch('profile')
+  @UseGuards(JwtAuthGuard)
+  async updateProfile(@CurrentUser() user: any, @Body() body: UpdateProfileDto) {
+    const updated = await this.authService.updateProfile(user.sub, body);
+    return { message: 'Perfil atualizado com sucesso!', user: updated };
+  }
+
+  @Post('profile/photo')
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('photo', {
+    storage: diskStorage({
+      destination: './uploads',
+      filename: (req, file, cb) => {
+        const userId = (req as any).user?.sub || 'unknown';
+        const ext = extname(file.originalname);
+        cb(null, `user-${userId}-${Date.now()}${ext}`);
+      },
+    }),
+    fileFilter: (req, file, cb) => {
+      if (!file.mimetype.match(/\/(jpg|jpeg|png|gif|webp)$/)) {
+        return cb(new BadRequestException('Apenas imagens são permitidas.'), false);
+      }
+      cb(null, true);
+    },
+    limits: { fileSize: 5 * 1024 * 1024 },
+  }))
+  async uploadPhoto(@CurrentUser() user: any, @UploadedFile() file: Express.Multer.File) {
+    const photoUrl = `/uploads/${file.filename}`;
+    const updated = await this.authService.updatePhoto(user.sub, photoUrl);
+    return { message: 'Foto atualizada com sucesso!', user: updated };
   }
 }
