@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/AuroraBeans/static/css/main.ab88f454.css",
+    "main.js": "/AuroraBeans/static/js/main.3c27b282.js",
+    "static/js/453.f33612d4.chunk.js": "/AuroraBeans/static/js/453.f33612d4.chunk.js",
+    "index.html": "/AuroraBeans/index.html",
+    "main.ab88f454.css.map": "/AuroraBeans/static/css/main.ab88f454.css.map",
+    "main.3c27b282.js.map": "/AuroraBeans/static/js/main.3c27b282.js.map",
+    "453.f33612d4.chunk.js.map": "/AuroraBeans/static/js/453.f33612d4.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ab88f454.css",
+    "static/js/main.3c27b282.js"
+  ]
+}
