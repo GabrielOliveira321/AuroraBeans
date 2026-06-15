@@ -1,28 +1,5 @@
 import config from '../config';
 
-export const checkoutApi = async (checkoutData) => {
-  try {
-    const response = await fetch(`${config.API_URL}/checkout`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(checkoutData),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Erro ao enviar checkout');
-    }
-
-    const data = await response.json();
-    return { success: true, data };
-  } catch (error) {
-    console.error('Erro na API de checkout:', error);
-    return { success: false, message: error.message };
-  }
-};
-
 export const createPaymentIntentApi = async (token, amount) => {
   try {
     const response = await fetch(`${config.API_URL}/checkout/create-payment-intent`, {

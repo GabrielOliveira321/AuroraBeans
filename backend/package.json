@@ -17,7 +17,14 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "prisma:generate": "npx prisma generate",
+    "prisma:migrate": "npx prisma migrate dev",
+    "prisma:push": "npx prisma db push",
+    "prisma:studio": "npx prisma studio",
+    "docker:db": "docker compose up -d",
+    "db:setup": "npm run docker:db && npm run prisma:migrate",
+    "setup": "npm install && cp -n .env.example .env 2>/dev/null && echo '' && echo '📝 Configure seu arquivo .env e depois execute: npm run db:setup'"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
