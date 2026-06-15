@@ -24,7 +24,8 @@
     "prisma:studio": "npx prisma studio",
     "docker:db": "docker compose up -d",
     "db:setup": "npm run docker:db && npm run prisma:migrate",
-    "setup": "npm install && cp -n .env.example .env 2>/dev/null && echo '' && echo '📝 Configure seu arquivo .env e depois execute: npm run db:setup'"
+    "setup": "npm install && cp -n .env.example .env 2>/dev/null && echo '' && echo '📝 Configure seu arquivo .env e depois execute: npm run db:setup'",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
